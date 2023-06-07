@@ -6,7 +6,6 @@ public class Quadtree<T> where T : Box
     public Quadtree<T> Ghgw { get; set; } // Greater height and greater width
     public Quadtree<T> Ghsw { get; set; } // greater height and smaller width
 
-    public T FoundValue { get; set; }
     public bool Add(T valueToAdd)
     {
         // Case Smaller height and smaller width
@@ -58,7 +57,6 @@ public class Quadtree<T> where T : Box
         }
         else return false;
     }
-    private int _foundValueId;
 
     public T Search(T valueToSearch, int maxDiffernce)
     {
@@ -161,6 +159,23 @@ public class Quadtree<T> where T : Box
         else return (false, default(T));
     }
 
+    public bool Delete(int id)
+    {
+        if (Value.Id == id)
+        {
+            Value.IsDeleted = true;
+            return true;
+        }
+        else if (Shsw != null && Shsw.Delete(id))
+            return true;
+        else if (Ghsw != null && Ghsw.Delete(id))
+            return true;
+        else if (Shgw != null && Shgw.Delete(id))
+            return true;
+        else if (Ghgw != null && Ghgw.Delete(id))
+            return true;
+        else return false;
+    }
 
     // Check whether the value meets the user differece criteria e.g. if the user criteria is 25% and the size he want is 5cm on 5cm 
     // the given box can be minmum of 5cm on 5cm and maximum of 6.25cm on 6.25cm (5 * 125%)
