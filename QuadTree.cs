@@ -62,67 +62,103 @@ public class Quadtree<T> where T : Box
 
     public T Search(T valueToSearch, int maxDiffernce)
     {
-        privateSearch(valueToSearch, maxDiffernce);
-        return FoundValue;
+        var (found, desiredValue) = privateSearch(valueToSearch, maxDiffernce);
+        if (found) return desiredValue;
+        else return null;
     }
-    private bool privateSearch(T valueToSearch, int maxDiffernce)
+    private (bool, T) privateSearch(T valueToSearch, int maxDiffernce)
     {
         // Case it meets the criteria
         if (IsInTheCriteria(Value, valueToSearch, maxDiffernce))
         {
-            FoundValue = Value;
-            return true;
+            return (true, Value);
         }
 
         // Case Smaller height and smaller width
         else if (valueToSearch.Height <= Value.Height && valueToSearch.Width <= Value.Width)
         {
             // Checks whether we have a smaller unit on height and with
-            if (Shsw != null && Shsw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
+            if (Shsw != null)
+            {
+                var (found, result) = Shsw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                    return (true, result);
+            }
 
             // Checks whether we have a smaller unit on height but with a greater width
-            else if (Shgw != null && Shgw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
-            else
-                return false;
+            if (Shgw != null)
+            {
+                var (found, result) = Shgw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                {
+                    return (true, result);
+                }
+            }
+            return (false, default(T));
         }
-
         // Case Smaller height and greater width
         else if (valueToSearch.Height <= Value.Height && valueToSearch.Width > Value.Width)
         {
-            if (Ghsw != null && Ghsw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
-            else if (Ghgw != null && Ghgw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
-            else
-                return false;
-        }
+            if (Ghsw != null)
+            {
+                var (found, result) = Ghsw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                    return (true, result);
+            }
 
+            if (Ghgw != null)
+            {
+                var (found, result) = Ghgw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                    return (true, result);
+            }
+            return (false, default(T));
+        }
         // Case Greater height and smaller width
         else if (valueToSearch.Height > Value.Height && valueToSearch.Width <= Value.Width)
         {
-            if (Shgw != null && Shgw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
-            else if (Ghgw != null && Ghgw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
-            else
-                return false;
+            if (Shgw != null)
+            {
+                var (found, result) = Shgw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                    return (true, result);
+            }
+            if (Ghgw != null)
+            {
+                var (found, result) = Ghgw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                    return (true, result);
+            }
+            return (false, default(T));
         }
 
         // Case Greater height and greater width
         else if (valueToSearch.Height > Value.Height && valueToSearch.Width > Value.Width)
         {
-            if (Shsw != null && Shsw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
-            else if (Shgw != null && Shgw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
-            else if (Ghsw != null && Ghsw.privateSearch(valueToSearch, maxDiffernce))
-                return true;
-            else
-                return false;
+            if (Shsw != null)
+            {
+                var (found, result) = Shsw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                    return (true, result);
+
+            }
+            if (Shgw != null)
+            {
+                var (found, result) = Shgw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                    return (true, result);
+            }
+            if (Ghsw != null)
+            {
+
+                var (found, result) = Ghsw.privateSearch(valueToSearch, maxDiffernce);
+                if (found)
+                    return (true, result);
+            }
+            return (false, default(T));
+
         }
-        else return false;
+        else return (false, default(T));
     }
 
 
