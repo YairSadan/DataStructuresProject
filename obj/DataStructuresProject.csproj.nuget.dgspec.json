@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/yairsadan/Desktop/DataStructuresProject/DataStructuresProject.csproj": {}
+    "/Users/yairsadan/Desktop/Desktop/DataStructuresProject/DataStructuresProject.csproj": {}
   },
   "projects": {
-    "/Users/yairsadan/Desktop/DataStructuresProject/DataStructuresProject.csproj": {
+    "/Users/yairsadan/Desktop/Desktop/DataStructuresProject/DataStructuresProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/yairsadan/Desktop/DataStructuresProject/DataStructuresProject.csproj",
+        "projectUniqueName": "/Users/yairsadan/Desktop/Desktop/DataStructuresProject/DataStructuresProject.csproj",
         "projectName": "DataStructuresProject",
-        "projectPath": "/Users/yairsadan/Desktop/DataStructuresProject/DataStructuresProject.csproj",
+        "projectPath": "/Users/yairsadan/Desktop/Desktop/DataStructuresProject/DataStructuresProject.csproj",
         "packagesPath": "/Users/yairsadan/.nuget/packages/",
-        "outputPath": "/Users/yairsadan/Desktop/DataStructuresProject/obj/",
+        "outputPath": "/Users/yairsadan/Desktop/Desktop/DataStructuresProject/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/yairsadan/.nuget/NuGet/NuGet.Config"

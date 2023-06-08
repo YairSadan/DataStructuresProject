@@ -1,13 +1,17 @@
 public class Quadtree<T> where T : Box
 {
     public T Value { get; set; }
-    public Quadtree<T> Shsw { get; set; } // Smaller height and smaller width
-    public Quadtree<T> Shgw { get; set; } // Smaller height and greater width
-    public Quadtree<T> Ghgw { get; set; } // Greater height and greater width
-    public Quadtree<T> Ghsw { get; set; } // greater height and smaller width
-
+    public Quadtree<T>? Shsw { get; set; } // Smaller height and smaller width
+    public Quadtree<T>? Shgw { get; set; } // Smaller height and greater width
+    public Quadtree<T>? Ghgw { get; set; } // Greater height and greater width
+    public Quadtree<T>? Ghsw { get; set; } // greater height and smaller width
     public bool Add(T valueToAdd)
     {
+        if (valueToAdd.Equals(Value))
+        {
+            Value.Count++;
+            return true;
+        }
         // Case Smaller height and smaller width
         if (valueToAdd.Height <= Value.Height && valueToAdd.Width <= Value.Width)
         {
@@ -58,13 +62,13 @@ public class Quadtree<T> where T : Box
         else return false;
     }
 
-    public T Search(T valueToSearch, int maxDiffernce)
+    public T SearchBySize(T valueToSearch, int maxDiffernce)
     {
         var (found, desiredValue) = privateSearch(valueToSearch, maxDiffernce);
         if (found) return desiredValue;
         else return null;
     }
-    private (bool, T) privateSearch(T valueToSearch, int maxDiffernce)
+    public (bool, T) privateSearch(T valueToSearch, int maxDiffernce)
     {
         // Case it meets the criteria
         if (IsInTheCriteria(Value, valueToSearch, maxDiffernce))
@@ -158,23 +162,56 @@ public class Quadtree<T> where T : Box
         }
         else return (false, default(T));
     }
-
-    public bool Delete(int id)
+    public (bool, T) SearchById(int id)
     {
         if (Value.Id == id)
+            return (true, Value);
+        if (Shsw != null)
         {
-            Value.IsDeleted = true;
-            return true;
+            var (found, result) = Shsw.SearchById(id);
+            if (found)
+                return (true, result);
         }
-        else if (Shsw != null && Shsw.Delete(id))
-            return true;
-        else if (Ghsw != null && Ghsw.Delete(id))
-            return true;
-        else if (Shgw != null && Shgw.Delete(id))
-            return true;
-        else if (Ghgw != null && Ghgw.Delete(id))
-            return true;
-        else return false;
+        if (Shgw != null)
+        {
+            var (found, result) = Shgw.SearchById(id);
+            if (found)
+                return (true, result);
+        }
+        if (Ghsw != null)
+        {
+            var (found, result) = Ghsw.SearchById(id);
+            if (found)
+                return (true, result);
+        }
+        if (Ghgw != null)
+        {
+            var (found, result) = Ghgw.SearchById(id);
+            if (found)
+                return (true, result);
+        }
+        return (false, default(T));
+    }
+    public void Delete(int id)
+    {
+        var (found, valueToModify) = SearchById(id);
+        if (found)
+            valueToModify.Count = 0;
+    }
+    public void SubtractCount(int id, int amount)
+    {
+        var (found, result) = SearchById(id);
+        if (found)
+        {
+            if (result.Count - amount < 0)
+            {
+                result.Count = 0;
+            }
+            else
+            {
+                result.Count -= amount;
+            }
+        }
     }
 
     // Check whether the value meets the user differece criteria e.g. if the user criteria is 25% and the size he want is 5cm on 5cm 
@@ -189,5 +226,15 @@ public class Quadtree<T> where T : Box
                 return true;
         }
         return false;
+    }
+    public int Count { get { return GetCount(); } }
+    public int GetCount()
+    {
+        int result = 0;
+        result += Shsw?.GetCount() ?? 0;
+        result += Shgw?.GetCount() ?? 0;
+        result += Ghgw?.GetCount() ?? 0;
+        result += Ghsw?.GetCount() ?? 0;
+        return (Value != null && !Value.IsDeleted) ? ++result : 0;
     }
 }
