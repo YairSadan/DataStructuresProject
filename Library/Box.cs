@@ -1,3 +1,4 @@
+namespace DataStructuresProject;
 public class Box
 {
     private int _count;
@@ -8,6 +9,7 @@ public class Box
     public double Height { get => _height; set { _height = value; _height = _height < 0 ? 0 : _height; } }
     public double Width { get => _width; set { _width = value; _width = _width < 0 ? 0 : _width; } }
     public bool IsDeleted { get; private set; }
+    public DateTime LastTimePurchased { get; set; }
     public int Count
     {
         get => _count;
@@ -24,6 +26,7 @@ public class Box
         Id = _counter++;
         IsDeleted = false;
         Count = 1;
+        LastTimePurchased = DateTime.Now;
     }
     public override bool Equals(object? obj)
     {
